@@ -13,7 +13,7 @@
 <br>
 <br>
 
- ![portal ](Podcast%20Generation%20Agent/workflow.png)
+ ![portal ](../Podcast%20Generation%20Agent/workflow.png)
 
 </div>
 
