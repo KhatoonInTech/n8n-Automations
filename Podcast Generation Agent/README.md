@@ -1,3 +1,23 @@
+<div align="center">
+  <h1>AI Podcast Generator Bot via Telegram</h1>
+  <a class="header-badge" target="_blank" href="https://www.linkedin.com/in/khatoonintech/">
+  <img src="https://img.shields.io/badge/style--5eba00.svg?label=LinkedIn&logo=linkedin&style=social">
+  </a>
+  
+
+<sub>Author:
+<a href="https://www.linkedin.com/in/Khatoonintech/" target="_blank">Ayesha Noreen</a><br>
+<small> <i>#KhatoonInTech CE' 27 @BZU |Agentic AI & Automation Engr @ DevRolin | ByteWise Certified ML/DL Engineer|GSoC Contributor | SWEfellow: Confiniti. ,HeadStarterAI</i> </small>
+</sub>
+<br>
+<br>
+<br>
+
+ ![portal ](../main/worflow.png)
+
+</div>
+
+---
 
 # AI Podcast Generator Bot via Telegram
 
