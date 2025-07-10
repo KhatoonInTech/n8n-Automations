@@ -13,7 +13,7 @@
 <br>
 <br>
 
- ![portal ](/worflow.png)
+ ![portal ](Podcast%20Generation%20Agent/workflow.png)
 
 </div>
 
@@ -126,3 +126,15 @@ The workflow follows a logical progression from receiving input to delivering th
 | Code | `Code` | Stitches all individual audio clips into one file. |
 | Merge | `Merge` | Combines the final audio with original message data. |
 | Telegram (Send Audio) | `Telegram` | Sends the completed podcast back to the user. |
+
+
+---
+
+<div align="center">
+<h3>For any query/help ,please contact our developer:</h3>  
+Developer : <a href="https://www.linkedin.com/in/Khatoonintech/" target="_blank">Ayesha Noreen</a><br>
+   <small> ByteWise Certified ML/DL Engineer|GSoC Contributor | SWEfellow: Confiniti. ,HeadStarterAI </small>
+<br> <a href="https://www.github.com/Khatoonintech/" target="_blank"> Don't forget to ⭐ our repo </a><br>
+
+
+</div>
