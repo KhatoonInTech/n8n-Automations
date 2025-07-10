@@ -1,0 +1,740 @@
+{
+  "name": "IG_AIPodcastElevelabsCustom",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $json.message.chat.id }}",
+        "binaryData": true,
+        "binaryPropertyName": "combined",
+        "additionalFields": {
+          "fileName": "tranformed_audio.mpeg"
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3300,
+        -320
+      ],
+      "id": "c6cd2046-d599-46b7-9f76-002ddccfaf19",
+      "name": "Telegram",
+      "webhookId": "74d3c018-cb8d-49c6-b7ed-f449deea2b2d",
+      "credentials": {
+        "telegramApi": {
+          "id": "OAwHKJMP7VU2KFgm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Setup first!\n\nFind alternative voiceIds and API-Key here: https://elevenlabs.io/app"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1380,
+        -320
+      ],
+      "id": "6f93bed7-ab38-4d03-9b31-17a83de1fc3d",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "0a8227ce-1e13-4f21-adec-a5e53c692af3",
+              "name": "hostId",
+              "value": "29vD33N1CtxCmqQRPOHJ",
+              "type": "string"
+            },
+            {
+              "id": "5dc22aec-d4ce-497d-8504-cb80c99d7d3b",
+              "name": "guestId",
+              "value": "cgSgspJ2msm6clMCkdW9",
+              "type": "string"
+            },
+            {
+              "id": "fd1bdc55-0293-40a8-b94d-5ba86b263978",
+              "name": "topic",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "9ea3070c-49b0-499f-9264-5f957f62d3c7",
+              "name": "lengthInMin",
+              "value": 0.2,
+              "type": "number"
+            },
+            {
+              "id": "10ebf7b3-87c1-4908-b6c8-70b2f3c4c7a2",
+              "name": "backgroundContextHost",
+              "value": "Marketing Professional, Name: Jakob Smith",
+              "type": "string"
+            },
+            {
+              "id": "657a932c-dc48-4be5-9f34-10b9b60421cf",
+              "name": "backgroundContextGuest",
+              "value": "Successfull Entrepreneur, Name: Joanah Leth",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        -100
+      ],
+      "id": "07976bd9-08bf-4a1b-90f4-cf8e5385b4f4",
+      "name": "SETUP"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "*"
+        ],
+        "additionalFields": {}
+      },
+      "id": "9e402977-b448-408c-a31e-4d8a19755209",
+      "name": "Listen for incoming events",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "position": [
+        -100,
+        -20
+      ],
+      "webhookId": "1e9d1a9f-b698-4c43-a9b1-c4ee49995988",
+      "typeVersion": 1,
+      "credentials": {
+        "telegramApi": {
+          "id": "OAwHKJMP7VU2KFgm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "notEmpty",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": "/",
+                    "id": "d68f5557-eaf3-430c-b3e0-4c0bbb147c45"
+                  }
+                ]
+              },
+              "renameOutput": true,
+              "outputKey": "Text"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "id": "dd41bbf0-bee0-450b-9160-b769821a4abc",
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.voice}}",
+                    "rightValue": ""
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voice"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "d2c5c49e-e81c-410b-a658-576c0318167c",
+      "name": "Determine content type",
+      "type": "n8n-nodes-base.switch",
+      "position": [
+        180,
+        -20
+      ],
+      "typeVersion": 3.2
+    },
+    {
+      "parameters": {
+        "operation": "sendChatAction",
+        "chatId": "={{ $('Listen for incoming events').first().json.message.from.id }}"
+      },
+      "id": "0228ff40-5b64-4591-b573-7f66e7a09140",
+      "name": "Send Typing action",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        140,
+        -240
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "a8ac393e-2e18-44e1-8f88-ec4f5e24e5ac",
+      "credentials": {
+        "telegramApi": {
+          "id": "OAwHKJMP7VU2KFgm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{$json.message.voice.file_id}}"
+      },
+      "id": "c27ba4c4-0448-40b0-9f32-5a8f59394ecd",
+      "name": "Download voice file",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        380,
+        60
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "10f52555-d15c-4dc5-be28-7407ee416ac1",
+      "credentials": {
+        "telegramApi": {
+          "id": "OAwHKJMP7VU2KFgm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {
+          "temperature": 0.7
+        }
+      },
+      "id": "92b9c62a-f188-40b3-8ca2-29edfb7029eb",
+      "name": "Convert audio to text",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "position": [
+        560,
+        60
+      ],
+      "typeVersion": 1.5,
+      "credentials": {
+        "openAiApi": {
+          "id": "rnt98gE7HvqfgBVY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bccbce0a-7786-49c9-979a-7a285cb69f78",
+              "name": "CombinedMessage",
+              "type": "string",
+              "value": "={{ $json.message && $json.message.text ? $json.message.text : ($json.text ? $json.text : '') }}"
+            },
+            {
+              "id": "5b1fc9f5-1408-4099-88cc-a23725c9eddb",
+              "name": "Message Type ",
+              "type": "string",
+              "value": "={{ $json?.message?.text && !$json?.text ? \"text query\" : (!$json?.message?.text && $json?.text ? \"voice message\" : \"unknown type message\") }}"
+            },
+            {
+              "id": "1e9a17fa-ec5d-49dc-9ff6-1f28b57fb02e",
+              "name": "Source Type",
+              "type": "string",
+              "value": "={{ $('Listen for incoming events').item.json.message.forward_origin ? \" forwarded\" : \"\" }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "91c4d9d0-12cd-4a79-b11c-84dfe2d0e199",
+      "name": "Combine content and set properties",
+      "type": "n8n-nodes-base.set",
+      "position": [
+        760,
+        -80
+      ],
+      "typeVersion": 3.4
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Context: \n {{ $('Convert audio to text').item.json.text }}\n\nExtract a topic for a podcast from it, only return the topic in a few words.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1040,
+        -100
+      ],
+      "id": "2f82c63e-1d7a-482e-8e62-9c293e7ccf79",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Listen for incoming events').first().json.message.from.id }}",
+        "text": "=Sorry, {{ $('Listen for incoming events').first().json.message.from.first_name }}! This command is not supported yet. Please send text or voice messages.",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "13545a33-e381-4353-b8b9-d88bd520bdc2",
+      "name": "Send error message",
+      "type": "n8n-nodes-base.telegram",
+      "position": [
+        380,
+        -240
+      ],
+      "typeVersion": 1.2,
+      "webhookId": "6b8890c2-8378-4d72-8775-cced68e9a9cc",
+      "credentials": {
+        "telegramApi": {
+          "id": "OAwHKJMP7VU2KFgm",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1060,
+        60
+      ],
+      "id": "1069d087-d692-4208-8e59-8ded793ff730",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "rnt98gE7HvqfgBVY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Topic:\n{{ $json.topic }}\n\nLength in min:\n{{ $json.lengthInMin }}\n\nHost background context:\n{{ $json.backgroundContextHost }}\n\nGuest background context:\n{{ $json.backgroundContextGuest }}\n\nHostId:\n{{ $json.hostId }}\n\nGuestId:\n{{ $json.guestId }}\n\n\nWith this information create a short text that covers the podcasts script: questions, hook, jokes, stories, who says what, only include spoken sentences, also include the host and guest id. Both guests refere to each other via their first name.",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": ""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        1680,
+        -100
+      ],
+      "id": "d1a2a92f-dabd-48d3-9f87-5213062e37fb",
+      "name": "AI Agent1",
+      "retryOnFail": true
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "o3",
+          "mode": "list",
+          "cachedResultName": "o3"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1680,
+        80
+      ],
+      "id": "b55c5f2d-5e7a-4813-8344-3b2ccd130070",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "rnt98gE7HvqfgBVY",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"conversation\": [\n      { \"actorId\": \"29vD33N1CtxCmqQRPOHJ\", \"text\": \"What is your option on X?\" },\n      { \"actorId\": \"cgSgspJ2msm6clMCkdW9\", \"text\": \"I love X! X is my favorite thing!\" },\n      { \"actorId\": \"29vD33N1CtxCmqQRPOHJ\", \"text\": \"Wow is it?\" }\n    ]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        1860,
+        80
+      ],
+      "id": "044f64e1-cbfe-40ac-b76a-d2610b935eaf",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output.conversation",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        2040,
+        -100
+      ],
+      "id": "7cc383f6-3f77-4d1f-a6a2-6d4e4b74d40b",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "jsCode": "/**\n * n8n Code node – rename each part to data_#, then create combined.mpga\n *\n * • Assumes every incoming item has its audio in item.binary.data\n *   ( item.binary.data.data  == base-64 string )\n * • Works only when all parts are already MPGA / audio-mpeg\n *   with matching codec + bitrate (typical when they came from\n *   the same recorder or TTS engine).\n */\n\nlet binaries = {};\nlet buffers  = [];\n\n// 1️⃣  Copy each clip to binaries.data_#\nfor (const [index, inputItem] of Object.entries($input.all())) {\n\n\tif (!inputItem.binary?.data.data) {\n\t\tthrow new Error(`Item #${index} misses binary.data.data`);\n\t}\n\n\t// keep the original part (optional – remove if you don’t need them)\n\tbinaries[`data_${index}`] = inputItem.binary.data;\n\n\t// collect raw bytes for concatenation\n\tbuffers.push(Buffer.from(inputItem.binary.data.data, 'base64'));\n}\n\n// 2️⃣  Glue MP3/MPGA frames back-to-back\nconst combinedBuffer = Buffer.concat(buffers);\n\n// 3️⃣  Wrap the merged track as n8n binary\nbinaries['combined'] = await this.helpers.prepareBinaryData(\n\tcombinedBuffer,\n\t'combined.mpga',     // file name users will see\n\t'audio/mpeg'         // MIME\n);\n\n// 4️⃣  Return ONE item that contains every individual piece\n//     plus the new 'combined' binary\nreturn [{\n\tjson: {\n\t\tpartsMerged: buffers.length,\n\t\tbinary_keys: Object.keys(binaries).join(',')\n\t},\n\tbinary: binaries\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2820,
+        -220
+      ],
+      "id": "3532bfa3-fc81-46d1-acf0-62d02c5a5513",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        2260,
+        -100
+      ],
+      "id": "389d670d-c604-4d71-9575-26d3fe018819",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        3040,
+        -40
+      ],
+      "id": "1d72d2cf-65f2-46bd-8adf-468dcf4ad52d",
+      "name": "Wait",
+      "webhookId": "9f4b3d7a-9eda-4e0c-8e95-084c7077082a"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.1,
+      "position": [
+        3100,
+        -320
+      ],
+      "id": "11296323-f4be-4604-a0a7-48a92da84065",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.elevenlabs.io/v1/text-to-speech/{{ $json.actorId }}?output_format=mp3_44100_128",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \n\"text\": {{ $json.text.toJsonString() }},\n  \"model_id\": \"eleven_multilingual_v2\"\n }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2820,
+        -40
+      ],
+      "id": "41b7b7b4-e3b5-417f-9278-ad251d3acc2d",
+      "name": "Elevenlabs Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "76d5k5Kh0OdqkLbB",
+          "name": "Elevenlabs"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "SETUP": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Listen for incoming events": {
+      "main": [
+        [
+          {
+            "node": "Determine content type",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Typing action",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Determine content type": {
+      "main": [
+        [
+          {
+            "node": "Combine content and set properties",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Download voice file",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send error message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download voice file": {
+      "main": [
+        [
+          {
+            "node": "Convert audio to text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert audio to text": {
+      "main": [
+        [
+          {
+            "node": "Combine content and set properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Combine content and set properties": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "SETUP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram": {
+      "main": [
+        []
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Elevenlabs Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Elevenlabs Request": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "44790fa5-2dcd-4c48-a20a-30ecd64f54dc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "32e39908afbcb49d79cc3b05576c030ecc2871395b7aec4e0fdc88778498f80e"
+  },
+  "id": "7I8y3feVH81ISkIu",
+  "tags": []
+}
