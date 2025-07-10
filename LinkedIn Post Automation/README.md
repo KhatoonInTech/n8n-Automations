@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>AI Podcast Generator Bot via Telegram</h1>
+  <h1>Automated AI News to LinkedIn Post Generator</h1>
   <a class="header-badge" target="_blank" href="https://www.linkedin.com/in/khatoonintech/">
   <img src="https://img.shields.io/badge/style--5eba00.svg?label=LinkedIn&logo=linkedin&style=social">
   </a>
