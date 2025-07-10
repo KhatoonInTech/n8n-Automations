@@ -13,7 +13,7 @@
 <br>
 <br>
 
- ![portal ](../main/worflow.png)
+ ![portal ](/worflow.png)
 
 </div>
 
